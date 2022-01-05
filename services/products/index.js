@@ -3,14 +3,7 @@ const { buildFederatedSchema } = require("@apollo/federation");
 
 const typeDefs = gql`
   extend type Query {
-    topProducts(first: Int = 5): [Product]
-  }
-
-  type Product @key(fields: "upc") {
-    upc: String!
-    name: String
-    price: Int
-    weight: Int
+    dummy: [Complex]
   }
 
   type User @extends @key(fields: "id") {
@@ -29,7 +22,7 @@ const typeDefs = gql`
 `;
 
 const resolvers = {
-  Product: {
+  Complex: {
     __resolveReference(object) {
       return products.find((product) => product.upc === object.upc);
     },
