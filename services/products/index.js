@@ -11,13 +11,16 @@ const typeDefs = gql`
   }
 
   type Complex @extends {
+    # ERROR: subproperty can't be external without @key or @requires!
     subproperty: String @external
   }
 
-  type BaseType @extends @key(fields: "user { id } dependency {subproperty}") {
+  # But subproperty is in a @key directive here! Apollo federation doesn't recognise this
+  type BaseType @extends @key(fields: "user {id} dependency {subproperty}") {
     user: User! @external
     dependency: Complex! @external
-    workaround: String! @requires(fields: "dependency {subproperty }")
+    # A requires directive here will work. Uncomment this line to "fix" the problem
+    # workaround: String! @requires(fields: "dependency {subproperty}")
   }
 `;
 
